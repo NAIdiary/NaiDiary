@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Sparkles } from 'lucide-react';
+import { Heart, Sparkles, X } from 'lucide-react';
 
 // Sistema simples de i18n
 const getLang = () => {
@@ -25,7 +25,11 @@ const messages = {
 const lang = getLang();
 const t = messages[lang] || messages['pt-BR'];
 
-const DonationStep: React.FC = () => {
+interface DonationStepProps {
+  onClose?: () => void;
+}
+
+const DonationStep: React.FC<DonationStepProps> = ({ onClose }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -37,8 +41,18 @@ const DonationStep: React.FC = () => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-        className="bg-white shadow-2xl rounded-2xl p-6 md:p-8 max-w-xl mx-auto w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white shadow-2xl rounded-2xl p-6 md:p-8 max-w-xl mx-auto w-full max-h-[90vh] overflow-y-auto relative"
       >
+        {/* Botão de fechar */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 dark:hover:text-white p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-400 z-10"
+            title="Fechar"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        )}
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

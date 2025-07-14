@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
       >
         <span>Doar 💗</span>
       </button>
-      {showDonation && <DonationStep />}
+      {showDonation && <DonationStep onClose={() => setShowDonation(false)} />}
       {/* Mobile Menu */}
       <MobileMenu isOpen={mobileMenuOpen} onToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
       

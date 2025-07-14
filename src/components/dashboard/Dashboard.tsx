@@ -30,13 +30,24 @@ import RelacionamentosPanel from './panels/RelacionamentosPanel';
 import SaudePanel from './panels/SaudePanel';
 import CorpoPanel from './panels/CorpoPanel';
 import EntretenimentoPanel from './panels/EntretenimentoPanel';
+import DonationStep from '../ui/DonationStep';
 
 const Dashboard: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showDonation, setShowDonation] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-x-hidden transition-colors duration-300 ease-in-out">
+      {/* Botão flutuante de doação */}
+      <button
+        onClick={() => setShowDonation(true)}
+        className="fixed bottom-6 right-6 z-40 bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-all duration-200"
+        title="Apoie o projeto!"
+      >
+        <span>Doar 💗</span>
+      </button>
+      {showDonation && <DonationStep />}
       {/* Mobile Menu */}
       <MobileMenu isOpen={mobileMenuOpen} onToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
       

@@ -1,0 +1,42 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fdf2f8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGradient)" stroke="#ffffff" stroke-width="8"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="120" cy="120" r="12" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="392" cy="120" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="120" cy="392" r="10" fill="rgba(255,255,255,0.25)"/>
+  <circle cx="392" cy="392" r="14" fill="rgba(255,255,255,0.3)"/>
+  
+  <!-- Main heart shape -->
+  <path d="M256 320c-20-20-60-40-60-80 0-22 18-40 40-40s40 18 40 40c0 40-40 60-60 80z" fill="url(#heartGradient)"/>
+  
+  <!-- Heart details -->
+  <path d="M256 280c-15-15-45-30-45-60 0-16 13-29 29-29s29 13 29 29c0 30-30 45-45 60z" fill="rgba(236,72,153,0.1)"/>
+  
+  <!-- Sparkle elements -->
+  <g fill="rgba(255,255,255,0.8)">
+    <path d="M180 180l8-8 8 8-8 8z"/>
+    <path d="M332 180l8-8 8 8-8 8z"/>
+    <path d="M256 140l8-8 8 8-8 8z"/>
+    <path d="M256 372l8-8 8 8-8 8z"/>
+  </g>
+  
+  <!-- Crown element on top -->
+  <path d="M220 200l16-20 16 20 16-20 16 20v8h-64z" fill="rgba(255,255,255,0.9)"/>
+  <circle cx="236" cy="188" r="3" fill="rgba(236,72,153,0.8)"/>
+  <circle cx="256" cy="188" r="3" fill="rgba(139,92,246,0.8)"/>
+  <circle cx="276" cy="188" r="3" fill="rgba(236,72,153,0.8)"/>
+</svg> 

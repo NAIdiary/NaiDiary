@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo Mobile - NAII</title>
+    <style>
+        /* Reset e configurações base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            background: linear-gradient(135deg, #fdf2f8 0%, #ffffff 50%, #f3e8ff 100%);
+            overflow-x: hidden;
+        }
+
+        /* Container responsivo */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header mobile */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e7eb;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #8b5cf6;
+        }
+
+        .menu-toggle {
+            width: 48px;
+            height: 48px;
+            border: none;
+            background: #f3f4f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-toggle:hover {
+            background: #e5e7eb;
+        }
+
+        /* Menu lateral */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-close {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #f3f4f6;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: #374151;
+            text-decoration: none;
+            transition: all 0.2s;
+            min-height: 48px;
+        }
+
+        .nav-item:hover {
+            background: #f9fafb;
+            color: #8b5cf6;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main content */
+        .main {
+            margin-top: 80px;
+            padding: 1rem 0;
+        }
+
+        /* Cards responsivos */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Grid responsivo */
+        .grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Tipografia responsiva */
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .text {
+            font-size: 1rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .text-small {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+
+        /* Botões responsivos */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 48px;
+            min-width: 48px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        /* Utilitários */
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-3 {
+            gap: 0.75rem;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        /* Animações */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Melhorias para telas muito pequenas */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.75rem;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            .btn {
+                padding: 0.75rem 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Melhorias para dispositivos touch */
+        @media (hover: none) {
+            .card:hover {
+                transform: none;
+            }
+            
+            .btn:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Mobile -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">NAII</div>
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Lateral -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">Menu</div>
+            <button class="sidebar-close" onclick="toggleMenu()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                Início
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">💄</div>
+                Beleza
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">🧘‍♀️</div>
+                Autocuidado
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">📚</div>
+                Educação
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">🛍️</div>
+                Compras
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">💝</div>
+                Glow Up
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">✨</div>
+                Manifestação
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">🗑️</div>
+                Lixeira Emocional
+            </a>
+        </div>
+    </nav>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Conteúdo Principal -->
+    <main class="main">
+        <div class="container">
+            <!-- Seção de Boas-vindas -->
+            <div class="card animate-fade-in">
+                <div class="flex items-center gap-4 mb-4">
+                    <div style="font-size: 2rem;">🌅</div>
+                    <div>
+                        <h1 class="title">Bom dia, Princesa!</h1>
+                        <p class="text">Como você está se sentindo hoje? Lembre-se: você é incrível! ✨</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estatísticas Rápidas -->
+            <div class="stats-grid">
+                <div class="stat-card animate-fade-in">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Dias consecutivos</div>
+                </div>
+                <div class="stat-card animate-fade-in">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Metas concluídas</div>
+                </div>
+                <div class="stat-card animate-fade-in">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Nível de energia</div>
+                </div>
+                <div class="stat-card animate-fade-in">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value">8 dias</div>
+                    <div class="stat-label">Próxima menstruação</div>
+                </div>
+            </div>
+
+            <!-- Seção de Painéis Favoritos -->
+            <div class="mb-6">
+                <h2 class="subtitle mb-4">Seus painéis favoritos 💕</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="flex items-center gap-4">
+                            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #ec4899, #f43f5e); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">✨</div>
+                            <div>
+                                <h3 class="subtitle">Glow Up</h3>
+                                <p class="text-small">Seu checklist de transformação</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="flex items-center gap-4">
+                            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #f59e0b, #ea580c); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">⚡</div>
+                            <div>
+                                <h3 class="subtitle">Manifestação</h3>
+                                <p class="text-small">Lei da atração em ação</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="flex items-center gap-4">
+                            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #ec4899, #be185d); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🧘‍♀️</div>
+                            <div>
+                                <h3 class="subtitle">Autocuidado</h3>
+                                <p class="text-small">Skincare e cuidados pessoais</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="flex items-center gap-4">
+                            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">💪</div>
+                            <div>
+                                <h3 class="subtitle">Corpo</h3>
+                                <p class="text-small">Saúde e bem-estar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Ações -->
+            <div class="mb-6">
+                <h2 class="subtitle mb-4">Ações rápidas</h2>
+                <div class="flex gap-3">
+                    <button class="btn btn-primary">Adicionar Meta</button>
+                    <button class="btn btn-secondary">Ver Progresso</button>
+                </div>
+            </div>
+
+            <!-- Seção de Dicas -->
+            <div class="card">
+                <h3 class="subtitle mb-2">💡 Dica do dia</h3>
+                <p class="text mb-4">Lembre-se de beber água! Hidratação é fundamental para manter sua pele radiante e sua energia alta.</p>
+                <button class="btn btn-primary">Ver mais dicas</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="text-small">NAII - Sua companheira digital</p>
+            <p class="text-small">Feito com 💜 para mulheres incríveis</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (!sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            }
+        });
+
+        // Animar elementos ao entrar na viewport
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observar todos os cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html> 

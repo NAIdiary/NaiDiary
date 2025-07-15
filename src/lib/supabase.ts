@@ -96,15 +96,15 @@ export const ensureUserProfile = async (user: { id: string, email: string }) => 
   const { data } = await supabase
     .from('users')
     .select('id')
-    .eq('id', user.id)
+    .eq('email', user.email)
     .single();
 
   if (!data) {
     await supabase.from('users').insert({
-      id: user.id,
       email: user.email,
       profile_completed: false,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     });
   }
 };

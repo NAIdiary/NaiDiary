@@ -14,20 +14,14 @@ export default function AuthForm() {
     setMsg('');
     const { error } = await signUp(email, password);
     if (error) setMsg(error.message);
-    else setMsg('Cadastro realizado! Verifique sua caixa de e-mail (inclusive spam) para confirmar sua conta antes de fazer login.');
+    else setMsg('Cadastro realizado! Agora você já pode fazer login.');
     setLoading(false);
   };
 
   const handleSignIn = async () => {
     setLoading(true);
     setMsg('');
-    // Validação de e-mail antes do login
-    const isValid = await validarEmail(email);
-    if (!isValid) {
-      setMsg('Seu e-mail não está liberado para acesso.');
-      setLoading(false);
-      return;
-    }
+    // Removida a validação de e-mail antes do login
     const { error } = await signIn(email, password);
     if (error) setMsg(error.message);
     else setMsg('Login realizado!');

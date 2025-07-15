@@ -9,7 +9,7 @@ export default function Cadastro() {
         <AuthForm />
         <p className="mt-4 text-sm text-gray-600 dark:text-gray-300 text-center">
           Use o mesmo e-mail da compra na Kiwify para acessar a plataforma.<br/>
-          Após cadastrar, confirme seu e-mail para liberar o acesso.
+          Após cadastrar, você já pode fazer login normalmente.
         </p>
       </div>
     </div>

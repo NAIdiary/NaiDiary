@@ -78,11 +78,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       });
 
+      console.log('SIGNUP RESULT:', { data, error });
+
       if (error) throw error;
 
       // Garante perfil após cadastro
       if (data.user) {
+        console.log('Chamando ensureUserProfile com:', data.user.email);
         await ensureUserProfile({ id: data.user.id, email: data.user.email || '' });
+      } else {
+        console.log('data.user está vazio após signUp');
       }
     } catch (error) {
       console.error('Sign up error:', error);
@@ -100,11 +105,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password
       });
 
+      console.log('SIGNIN RESULT:', { data, error });
+
       if (error) throw error;
 
       if (data.user) {
         setUser(data.user);
-        await ensureUserProfile({ id: data.user.id, email: data.user.email || '' }); // Garante perfil após login
+        console.log('Chamando ensureUserProfile com:', data.user.email);
+        await ensureUserProfile({ id: data.user.id, email: data.user.email || '' });
+      } else {
+        console.log('data.user está vazio após signIn');
       }
     } catch (error) {
       console.error('Sign in error:', error);

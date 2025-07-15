@@ -8,6 +8,7 @@ import OnboardingFlow from './components/onboarding/OnboardingFlow';
 import Dashboard from './components/dashboard/Dashboard';
 import Community from './components/community/Community';
 import LoadingSpinner from './components/ui/LoadingSpinner';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const AppRoutes = () => {
   const { user, loading } = useAuth();
@@ -57,13 +58,15 @@ const AppRoutes = () => {
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-x-hidden transition-colors duration-300 ease-in-out">
-            <AppRoutes />
-          </div>
-        </Router>
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <Router>
+            <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-x-hidden transition-colors duration-300 ease-in-out">
+              <AppRoutes />
+            </div>
+          </Router>
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

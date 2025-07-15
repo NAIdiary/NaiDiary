@@ -23,20 +23,20 @@ export const validateKiwifyPurchase = async (email: string): Promise<boolean> =>
 };
 
 // User management functions
-export const createUser = async (email: string) => {
-  const { data, error } = await supabase
-    .from('users')
-    .insert({ 
-      email, 
-      profile_completed: false,
-      created_at: new Date().toISOString()
-    })
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
-};
+// Removido: export const createUser = async (email: string) => {
+//   const { data, error } = await supabase
+//     .from('users')
+//     .insert({ 
+//       email, 
+//       profile_completed: false,
+//       created_at: new Date().toISOString()
+//     })
+//     .select()
+//     .single();
+//
+//   if (error) throw error;
+//   return data;
+// };
 
 export const updateUserProfile = async (userId: string, profile: Partial<any>) => {
   const { error } = await supabase

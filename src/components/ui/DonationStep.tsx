@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Sparkles, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Sistema simples de i18n
 const getLang = () => {
@@ -30,6 +31,7 @@ interface DonationStepProps {
 }
 
 const DonationStep: React.FC<DonationStepProps> = ({ onClose }) => {
+  const navigate = useNavigate();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -100,12 +102,12 @@ const DonationStep: React.FC<DonationStepProps> = ({ onClose }) => {
           >
             {t.donate}
           </a>
-          <a
-            href="/painel"
+          <button
+            onClick={() => navigate('/')}
             className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-xl shadow-md text-base transition-all duration-200 text-center"
           >
             Ir para o Dashboard agora
-          </a>
+          </button>
         </motion.div>
       </motion.div>
     </motion.div>

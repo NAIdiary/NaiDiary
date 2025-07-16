@@ -50,12 +50,12 @@ export const updateUserProfile = async (userEmail: string, profile: Partial<any>
   if (error) throw error;
 };
 
-// Busca usuário pelo id (seguro com RLS)
-export const getUserById = async (id: string) => {
+// Busca usuário pelo email (seguro com RLS)
+export const getUserByEmail = async (email: string) => {
   const { data, error } = await supabase
     .from('users')
     .select('*')
-    .eq('id', id)
+    .eq('email', email)
     .single();
   if (error && error.code !== 'PGRST116') throw error;
   return data;

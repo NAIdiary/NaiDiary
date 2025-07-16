@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { getUserById } from '../lib/supabase';
+import { getUserByEmail } from '../lib/supabase';
 
 export const useOnboardingStatus = () => {
   const { user } = useAuth();
@@ -9,12 +9,12 @@ export const useOnboardingStatus = () => {
 
   useEffect(() => {
     const checkOnboardingStatus = async () => {
-      if (!user?.id) {
+      if (!user?.email) {
         setLoading(false);
         return;
       }
       try {
-        const userData = await getUserById(user.id);
+        const userData = await getUserByEmail(user.email);
         setProfileCompleted(userData?.profile_completed || false);
       } catch (error) {
         console.error('Error checking onboarding status:', error);
@@ -24,7 +24,7 @@ export const useOnboardingStatus = () => {
       }
     };
     checkOnboardingStatus();
-  }, [user?.id]);
+  }, [user?.email]);
 
   return { profileCompleted, loading };
 }; 

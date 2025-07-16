@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Sparkles, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
 
 // Sistema simples de i18n
 const getLang = () => {
@@ -32,6 +34,35 @@ interface DonationStepProps {
 
 const DonationStep: React.FC<DonationStepProps> = ({ onClose }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleGoToDashboard = async () => {
+    try {
+      if (!user?.email) {
+        alert('Usuária não autenticada.');
+        return;
+      }
+      const { data: updatedUser, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', user.email)
+        .single();
+      if (error) {
+        console.error('Erro ao buscar usuário:', error);
+        alert('Erro ao verificar o status do perfil.');
+        return;
+      }
+      if (updatedUser?.profile_completed) {
+        navigate('/');
+      } else {
+        alert('Você ainda precisa completar o onboarding.');
+      }
+    } catch (err) {
+      console.error('Erro inesperado:', err);
+      alert('Algo deu errado. Tente novamente.');
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -103,7 +134,7 @@ const DonationStep: React.FC<DonationStepProps> = ({ onClose }) => {
             {t.donate}
           </a>
           <button
-            onClick={() => navigate('/')}
+            onClick={handleGoToDashboard}
             className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-xl shadow-md text-base transition-all duration-200 text-center"
           >
             Ir para o Dashboard agora

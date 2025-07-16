@@ -10,14 +10,14 @@ export function usePainelConteudo(painel_nome: string) {
 
   useEffect(() => {
     async function fetchConteudo() {
-      if (!user?.id) {
+      if (!user?.email) {
         setCarregando(false);
         return;
       }
       setCarregando(true);
       setErro(null);
       try {
-        const data = await carregarConteudoDoPainel(user.id, painel_nome);
+        const data = await carregarConteudoDoPainel(user.email, painel_nome);
         setConteudo(data);
       } catch (e: any) {
         setErro(e.message || 'Erro ao carregar conteúdo');
@@ -27,14 +27,14 @@ export function usePainelConteudo(painel_nome: string) {
     }
     fetchConteudo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, painel_nome]);
+  }, [user?.email, painel_nome]);
 
   const salvar = async (novoConteudo: any) => {
-    if (!user?.id) return;
+    if (!user?.email) return;
     setCarregando(true);
     setErro(null);
     try {
-      await salvarConteudoDoPainel(user.id, painel_nome, novoConteudo);
+      await salvarConteudoDoPainel(user.email, painel_nome, novoConteudo);
       setConteudo(novoConteudo);
     } catch (e: any) {
       setErro(e.message || 'Erro ao salvar conteúdo');

@@ -30,7 +30,7 @@ export interface DashboardPanel {
 
 export interface CommunityPost {
   id: string;
-  user_id: string;
+  email: string;
   content: string;
   image_url?: string;
   likes_count: number;
@@ -45,7 +45,7 @@ export interface CommunityPost {
 export interface Comment {
   id: string;
   post_id: string;
-  user_id: string;
+  email: string;
   content: string;
   created_at: string;
   user: {
@@ -87,7 +87,6 @@ export interface GlowUpItem {
 
 export interface Donation {
   id: string;
-  user_id?: string;
   email: string;
   amount: number;
   message?: string;
@@ -96,7 +95,7 @@ export interface Donation {
 
 export interface PainelConteudo {
   id: string; // UUID
-  user_id: string; // UUID
+  email: string; // email do usuário
   painel_nome: string;
   conteudo: any; // JSON
   atualizado_em: string; // timestamp

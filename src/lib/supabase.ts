@@ -62,17 +62,17 @@ export const getUserByEmail = async (email: string) => {
 };
 
 // Salva (upsert) o conteúdo de um painel para um usuário
-export async function salvarConteudoDoPainel(userId: string, painel_nome: string, conteudo: any) {
+export async function salvarConteudoDoPainel(email: string, painel_nome: string, conteudo: any) {
   const { data, error } = await supabase
     .from('painel_conteudos')
     .upsert([
       {
-        user_id: userId,
+        email,
         painel_nome,
         conteudo,
         atualizado_em: new Date().toISOString(),
       },
-    ], { onConflict: 'user_id,painel_nome' })
+    ], { onConflict: 'email,painel_nome' })
     .select()
     .single();
   if (error) throw error;
@@ -80,11 +80,11 @@ export async function salvarConteudoDoPainel(userId: string, painel_nome: string
 }
 
 // Carrega o conteúdo de um painel para um usuário
-export async function carregarConteudoDoPainel(userId: string, painel_nome: string) {
+export async function carregarConteudoDoPainel(email: string, painel_nome: string) {
   const { data, error } = await supabase
     .from('painel_conteudos')
     .select('conteudo')
-    .eq('user_id', userId)
+    .eq('email', email)
     .eq('painel_nome', painel_nome)
     .single();
   if (error && error.code !== 'PGRST116') throw error;

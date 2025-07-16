@@ -38,14 +38,14 @@ export const validateKiwifyPurchase = async (email: string): Promise<boolean> =>
 //   return data;
 // };
 
-export const updateUserProfile = async (userId: string, profile: Partial<any>) => {
+export const updateUserProfile = async (userEmail: string, profile: Partial<any>) => {
   const { error } = await supabase
     .from('users')
     .update({ 
       ...profile, 
       updated_at: new Date().toISOString() 
     })
-    .eq('id', userId);
+    .eq('email', userEmail);
 
   if (error) throw error;
 };

@@ -144,7 +144,7 @@ const OnboardingFlow: React.FC = () => {
         profile_completed: true,
       };
 
-      await updateUserProfile(user.id, profileData);
+      await updateUserProfile(user.email, profileData);
       updateUser(profileData);
       setShowContract(true);
     } catch (error) {
